@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.TaskProgressView?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.tabs.brute.force.panels.process.view.components.progress.ProgressPanel">
+   <content>
+      <VBox>
+         <children>
+            <TaskProgressView fx:id="bruteForceTaskProgressView" maxHeight="200.0" minHeight="100.0" prefHeight="100.0" />
+            <fx:include fx:id="taskDetailsView" source="../../../task/details/view/TaskDetailsView.fxml" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

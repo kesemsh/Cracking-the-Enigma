@@ -3,10 +3,11 @@ package object.machine.configuration;
 import object.numbering.RomanNumber;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MachineConfiguration implements Serializable {
+public class MachineConfiguration implements Serializable, Cloneable {
     private final List<Integer> rotorIDsInOrder;
     private final List<Character> rotorStartPositionsByChar;
     private Map<Integer, Integer> rotorIDToRotationsLeftForNotchPerRotor;
@@ -26,6 +27,14 @@ public class MachineConfiguration implements Serializable {
         this.rotorStartPositionsByChar = rotorStartPositionsByChar;
         this.reflectorID = reflectorID;
         this.plugsToUse = plugsToUse;
+        rotorIDToRotationsLeftForNotchPerRotor = null;
+    }
+
+    public MachineConfiguration(List<Integer> rotorIDsInOrder, List<Character> rotorStartPositionsByChar, RomanNumber reflectorID) {
+        this.rotorIDsInOrder = rotorIDsInOrder;
+        this.rotorStartPositionsByChar = rotorStartPositionsByChar;
+        this.reflectorID = reflectorID;
+        plugsToUse = new HashMap<>();
         rotorIDToRotationsLeftForNotchPerRotor = null;
     }
 
@@ -54,7 +63,11 @@ public class MachineConfiguration implements Serializable {
 
         rotorIDsInOrder.forEach(x -> rotorsIDs.append(x).append(","));
         for (int i = 0; i < rotorIDsInOrder.size(); i++) {
-            rotorPositions.append(rotorStartPositionsByChar.get(i)).append(String.format("(%d)", rotorIDToRotationsLeftForNotchPerRotor.get(rotorIDsInOrder.get(i))));
+            if (rotorIDToRotationsLeftForNotchPerRotor != null) {
+                rotorPositions.append(rotorStartPositionsByChar.get(i)).append(String.format("(%d)", rotorIDToRotationsLeftForNotchPerRotor.get(rotorIDsInOrder.get(i))));
+            } else {
+                rotorPositions.append(rotorStartPositionsByChar.get(i));
+            }
         }
 
         if (!plugsToUse.isEmpty()) {
@@ -70,5 +83,16 @@ public class MachineConfiguration implements Serializable {
 
     public void setRotorNotchPositionsPerID(Map<Integer, Integer> rotorIDToRotationsLeftForNotchPerRotor) {
         this.rotorIDToRotationsLeftForNotchPerRotor = rotorIDToRotationsLeftForNotchPerRotor;
+    }
+
+    @Override
+    public MachineConfiguration clone() {
+        try {
+            MachineConfiguration clone = (MachineConfiguration) super.clone();
+
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

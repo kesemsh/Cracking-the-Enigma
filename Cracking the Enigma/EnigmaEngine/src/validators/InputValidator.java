@@ -5,6 +5,7 @@ import exceptions.machine.InvalidFileTypeException;
 import exceptions.machine.InvalidMachinePathException;
 import exceptions.machine.NotAFileException;
 import machine.Machine;
+import machine.components.dictionary.Dictionary;
 
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
@@ -143,6 +144,12 @@ public class InputValidator {
 
         for (Character c : userInput.toCharArray()) {
             checkIfReceivedInputIsValidCharacter(machine, c);
+        }
+    }
+
+    public void checkIfMessageIncludesOnlyWordsFromDictionary(String originalMessageWithoutExcludedCharacters, Dictionary dictionary) throws InvalidWordException {
+        if (!dictionary.areWordsInDictionary(Arrays.asList(originalMessageWithoutExcludedCharacters.split(" ")))) {
+            throw new InvalidWordException(dictionary.getInvalidWordFromList(Arrays.asList(originalMessageWithoutExcludedCharacters.split(" "))));
         }
     }
 }

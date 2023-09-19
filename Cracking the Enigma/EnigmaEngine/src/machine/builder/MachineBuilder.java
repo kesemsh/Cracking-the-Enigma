@@ -2,6 +2,9 @@ package machine.builder;
 
 import jaxb.generated.*;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import machine.components.dictionary.Dictionary;
 import object.numbering.RomanNumber;
 
 import machine.MachineImpl;
@@ -17,8 +20,17 @@ public class MachineBuilder {
     public MachineImpl buildEnigmaMachine(CTEEnigma cteEnigma) {
         Keyboard keyboard = buildKeyboardFromCTEEnigma(cteEnigma);
         MachineStorage machineStorage = buildStorageFromCTEEnigma(cteEnigma, keyboard);
+        Dictionary dictionary = buildDictionaryFromCTEEnigma(cteEnigma);
 
-        return new MachineImpl(keyboard, machineStorage, cteEnigma.getCTEMachine().getRotorsCount());
+        return new MachineImpl(keyboard, machineStorage, dictionary, cteEnigma.getCTEMachine().getRotorsCount(), cteEnigma.getCTEDecipher().getAgents());
+    }
+
+    private Dictionary buildDictionaryFromCTEEnigma(CTEEnigma cteEnigma) {
+        List<Character> excludedCharacters = cteEnigma.getCTEDecipher().getCTEDictionary().getExcludeChars().toUpperCase().chars().mapToObj(c -> (char) c).collect(Collectors.toList());
+        Set<String> allowedWords = new HashSet<>(Arrays.asList(cteEnigma.getCTEDecipher().getCTEDictionary().getWords().toUpperCase().trim().chars().filter(x -> !excludedCharacters.contains((char) x))
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString().split(" ")));
+
+        return new Dictionary(allowedWords, excludedCharacters);
     }
 
     private Keyboard buildKeyboardFromCTEEnigma(CTEEnigma cteEnigma) {

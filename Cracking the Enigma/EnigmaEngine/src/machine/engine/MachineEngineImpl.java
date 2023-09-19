@@ -2,10 +2,15 @@ package machine.engine;
 
 import exceptions.input.*;
 import exceptions.machine.*;
+import machine.automatic.decryption.decrypted.message.candidate.DecryptedMessageCandidate;
+import machine.automatic.decryption.input.data.DecryptionInputData;
+import machine.automatic.decryption.manager.DecryptionManager;
+import machine.automatic.decryption.pre.decryption.data.PreDecryptionData;
 import machine.builder.MachineBuilder;
 import jaxb.generated.CTEEnigma;
 import jaxb.xml.reader.XMLReader;
 import machine.Machine;
+import machine.components.dictionary.Dictionary;
 import object.machine.history.MachineHistoryPerConfiguration;
 import object.machine.configuration.MachineConfiguration;
 import validators.InputValidator;
@@ -23,12 +28,13 @@ import java.util.*;
 public class MachineEngineImpl implements MachineEngine {
     private Machine machine = null;
     private boolean isConfigurationSet = false;
-    MachineValidator machineValidator = new MachineValidator();
-    MachineBuilder machineBuilder = new MachineBuilder();
-    InputValidator inputValidator = new InputValidator();
+    private DecryptionManager decryptionManager;
+    private final MachineValidator machineValidator = new MachineValidator();
+    private final MachineBuilder machineBuilder = new MachineBuilder();
+    private final InputValidator inputValidator = new InputValidator();
 
     @Override
-    public void loadMachineFile(String xmlFilePath) throws InvalidPathException, IOException, JAXBException, XMLLogicException, EmptyInputException {
+    public void loadMachineFromXMLFile(String xmlFilePath) throws InvalidPathException, IOException, JAXBException, XMLLogicException, EmptyInputException {
         inputValidator.checkFilePath(xmlFilePath, ".xml");
 
         CTEEnigma cteEnigma = XMLReader.getEnigmaFromXMLFile(xmlFilePath);
@@ -59,7 +65,7 @@ public class MachineEngineImpl implements MachineEngine {
         return machine.getAllReflectorsInStorageCount();
     }
 
-    public MachineState showMachineState() throws MachineNotLoadedException {
+    public MachineState getMachineState() throws MachineNotLoadedException {
         checkIfMachineIsLoaded();
 
         return machine.exportState();
@@ -82,16 +88,18 @@ public class MachineEngineImpl implements MachineEngine {
     @Override
     public void setConfiguration(MachineConfiguration machineConfiguration) throws MachineNotLoadedException {
         checkIfMachineIsLoaded();
-        machine.setConfiguration(machineConfiguration);
+        machine.setConfiguration(machineConfiguration, true);
         isConfigurationSet = true;
     }
 
     @Override
-    public String processInput(String messageToProcess) throws MachineNotLoadedException, ConfigurationNotSetException {
+    public String processInput(String messageToProcess, boolean addMessageToHistory, boolean saveMessageForLater) throws MachineNotLoadedException, ConfigurationNotSetException, InvalidCharacterException, EmptyInputException {
         checkIfMachineIsLoaded();
         checkIfConfigurationIsSet();
+        messageToProcess = messageToProcess.toUpperCase();
+        checkMessageToProcessInput(messageToProcess);
 
-        return machine.processInput(messageToProcess);
+        return machine.processInput(messageToProcess, addMessageToHistory, saveMessageForLater);
     }
 
     @Override
@@ -224,14 +232,18 @@ public class MachineEngineImpl implements MachineEngine {
     }
 
     @Override
-    public void saveMachineToMagicFile(String filePath) throws MachineNotLoadedException, MachineSaveException {
+    public void insertAccumulatedMessageToHistory() {
+        machine.insertAccumulatedMessageToHistory();
+    }
+
+    @Override
+    public void saveMachineToMAGICFile(String filePath) throws MachineNotLoadedException, MachineSaveException {
         checkIfMachineIsLoaded();
 
         if (filePath.isEmpty()) {
-            throw new MachineSaveException("Error - Machine save file name must not be empty!");
+            throw new MachineSaveException("Machine save file name must not be empty!");
         }
 
-        filePath = filePath + ".magic";
         try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(Paths.get(filePath)))) {
             out.writeObject(machine);
         } catch (Exception e) {
@@ -240,13 +252,12 @@ public class MachineEngineImpl implements MachineEngine {
     }
 
     @Override
-    public void loadMachineFromMagicFile(String filePath) throws IOException, EmptyInputException, MachineLoadException {
+    public void loadMachineFromMAGICFile(String filePath) throws IOException, EmptyInputException, MachineLoadException {
 
         if (filePath.isEmpty()) {
-            throw new MachineLoadException("Error - Machine load file name must not be empty!");
+            throw new MachineLoadException("Machine load file name must not be empty!");
         }
 
-        filePath = filePath + ".magic";
         inputValidator.checkFilePath(filePath, ".magic");
         try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(Paths.get(filePath)))) {
             machine = (Machine) in.readObject();
@@ -259,5 +270,65 @@ public class MachineEngineImpl implements MachineEngine {
     @Override
     public List<Character> getAllKeys() {
         return machine.getAllKeys();
+    }
+
+    @Override
+    public boolean isConfigurationSet() {
+        return isConfigurationSet;
+    }
+
+    @Override
+    public PreDecryptionData getPreDecryptionData(DecryptionInputData decryptionInputData) throws InvalidWordException {
+        Machine machineClone = machine.clone();
+        String originalMessageWithoutExcludedCharacters = machineClone.getDictionary().getMessageWithoutExcludedCharacters(decryptionInputData.getOriginalMessage().toUpperCase());
+
+        machineClone.setConfiguration(machine.getCurrentMachineConfiguration(), false);
+        inputValidator.checkIfMessageIncludesOnlyWordsFromDictionary(originalMessageWithoutExcludedCharacters, machineClone.getDictionary());
+
+        decryptionInputData.setOriginalMessage(originalMessageWithoutExcludedCharacters);
+        decryptionInputData.setMessageToDecrypt(machine.processInput(originalMessageWithoutExcludedCharacters, true, false));
+        decryptionManager = new DecryptionManager(decryptionInputData, machineClone);
+
+        return new PreDecryptionData(decryptionManager.getAmountOfTotalTasks(), originalMessageWithoutExcludedCharacters, decryptionInputData.getMessageToDecrypt());
+    }
+
+    @Override
+    public void startAutomaticDecryption() {
+        decryptionManager.startAutomaticDecryption();
+    }
+
+    @Override
+    public void pauseAutomaticDecryption() {
+        decryptionManager.pauseAutomaticDecryption();
+    }
+
+    @Override
+    public void resumeAutomaticDecryption() {
+        decryptionManager.resumeAutomaticDecryption();
+    }
+
+    @Override
+    public void stopAutomaticDecryption() {
+        decryptionManager.stopAutomaticDecryption();
+    }
+
+    @Override
+    public Dictionary getDictionary() {
+        return machine.getDictionary();
+    }
+
+    @Override
+    public int getAgentsCount() {
+        return machine.getAgentsCount();
+    }
+
+    @Override
+    public void checkIfPaused() {
+        decryptionManager.checkIfPaused();
+    }
+
+    @Override
+    public boolean isDecryptedMessageCorrect(DecryptedMessageCandidate decryptedMessageCandidate) {
+        return decryptionManager.isDecryptedMessageCorrect(decryptedMessageCandidate);
     }
 }

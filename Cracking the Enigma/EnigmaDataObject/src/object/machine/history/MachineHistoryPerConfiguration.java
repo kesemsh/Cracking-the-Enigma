@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MachineHistoryPerConfiguration implements Serializable {
-    private final List<String> unprocessedInput = new ArrayList<>();
-    private final List<String> processedInput = new ArrayList<>();
-    private final List<Long> nanoSecondsPerMessage = new ArrayList<>();
+    private final List<SingleProcessHistory> singleProcessHistories = new ArrayList<>();
     private final MachineConfiguration machineConfiguration;
     private final int configurationNumber;
 
@@ -18,15 +16,17 @@ public class MachineHistoryPerConfiguration implements Serializable {
         this.configurationNumber = configurationNumber;
     }
 
-    public void addUnprocessedInput(String unprocessedInput) {
-        this.unprocessedInput.add(unprocessedInput);
+    public void addSingleProcessHistory(String unprocessedInput, String processedInput, Long timeTaken) {
+        singleProcessHistories.add(new SingleProcessHistory(unprocessedInput, processedInput, timeTaken));
     }
 
-    public void addProcessedInput(String processedInput) {
-        this.processedInput.add(processedInput);
+    public MachineConfiguration getMachineConfiguration() {
+        return machineConfiguration;
     }
 
-    public void addTimeTakenPerMessage(Long timeTaken) { this.nanoSecondsPerMessage.add(timeTaken); }
+    public List<SingleProcessHistory> getSingleProcessHistories() {
+        return singleProcessHistories;
+    }
 
     @Override
     public String toString() {
@@ -34,8 +34,8 @@ public class MachineHistoryPerConfiguration implements Serializable {
         final String newLine = System.lineSeparator();
 
         result.append(String.format("Configuration #%d: ", configurationNumber)).append(machineConfiguration).append(newLine);
-        for (int i = 0; i < unprocessedInput.size(); i++) {
-            result.append(String.format("%d. <%s> --> <%s> (%,d nano-seconds)", i + 1, unprocessedInput.get(i), processedInput.get(i), nanoSecondsPerMessage.get(i)));
+        for (int i = 0; i < singleProcessHistories.size(); i++) {
+            result.append(String.format("%d. <%s> --> <%s> (%,d nano-seconds)", i + 1, singleProcessHistories.get(i).getUnprocessedInput(), singleProcessHistories.get(i).getProcessedInput(), singleProcessHistories.get(i).getTimeTaken()));
             result.append(newLine);
         }
         result.append(newLine);

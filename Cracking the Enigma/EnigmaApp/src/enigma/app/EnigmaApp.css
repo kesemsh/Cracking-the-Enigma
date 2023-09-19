@@ -1,0 +1,64 @@
+/*
+.button,.label {
+    -fx-text-fill: linear-gradient(to top, gray, black, white);
+}
+
+.root{
+    -fx-background: white;
+}
+
+#app-title {
+    -fx-font-size: 40;
+    -fx-font-style: italic;
+    -fx-font-family: "Comic Sans MS";
+    -fx-text-fill: linear-gradient(to top, black 20%, red, white);
+}
+
+.title-label {
+    -fx-font-size: 30;
+}
+
+.sub-header-label {
+    -fx-font-size: 18;
+}
+
+.missing-value-label {
+    -fx-text-fill: red;
+}
+
+.value-label {
+    -fx-font-size: 17;
+}
+
+.info-label {
+    -fx-font-style: italic;
+    -fx-font-family: Arial;
+}
+
+.reset-button {
+    -fx-background-color: radial-gradient(radius 160%, red, black, red);
+    -fx-text-fill: white;
+}
+
+.clear-text-button {
+    -fx-background-color: radial-gradient(radius 170%, yellow, black, yellow);
+    -fx-text-fill: white;
+}
+
+.go-button {
+    -fx-background-color: radial-gradient(radius 160%, green, black, green);
+    -fx-text-fill: white;
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 13;
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+}
+
+.tab-button {
+    -fx-background-color: radial-gradient(radius 170%, transparent, black, white);
+    -fx-text-fill: white;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}*/

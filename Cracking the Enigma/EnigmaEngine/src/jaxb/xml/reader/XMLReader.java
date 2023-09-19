@@ -19,7 +19,7 @@ public class XMLReader {
             return deserializeFrom(inputStream);
         }
         catch (JAXBException e) {
-            throw new JAXBException("Error - File is not a valid machine file!");
+            throw new JAXBException("File is not a valid machine file!");
         }
     }
 

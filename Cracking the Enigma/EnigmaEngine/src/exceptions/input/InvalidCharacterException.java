@@ -2,7 +2,7 @@ package exceptions.input;
 
 public class InvalidCharacterException extends Exception {
     private final Character enteredCharacter;
-    private final String EXCEPTION_MESSAGE = "Error - \"%s\" is an invalid character!";
+    private final String EXCEPTION_MESSAGE = "\"%s\" is an invalid character!";
 
     public InvalidCharacterException(Character enteredCharacter) {
         this.enteredCharacter = enteredCharacter;

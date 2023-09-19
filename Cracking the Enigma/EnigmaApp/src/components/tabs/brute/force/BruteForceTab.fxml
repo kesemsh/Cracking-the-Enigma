@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.tabs.brute.force.BruteForceTab">
+   <content>
+      <VBox>
+         <children>
+            <HBox alignment="TOP_CENTER">
+               <children>
+                  <Label alignment="TOP_LEFT" text="Brute Force">
+                     <font>
+                        <Font name="Berlin Sans FB" size="25.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../resources/images/BruteForce.png" />
+                           </image></ImageView>
+                     </graphic>
+                     <HBox.margin>
+                        <Insets bottom="10.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <VBox spacing="10.0">
+               <children>
+                  <fx:include fx:id="currentConfigurationView" source="../../../configuration/view/MachineConfigurationView.fxml" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+            </VBox>
+            <Separator prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <StackPane style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+               <children>
+                   <fx:include fx:id="decryptionInputPanel" source="panels/decryption/input/DecryptionInputPanel.fxml" StackPane.alignment="TOP_CENTER" />
+                   <fx:include fx:id="processView" source="panels/process/view/ProcessView.fxml" StackPane.alignment="TOP_CENTER" />
+                   <fx:include fx:id="summaryPanel" source="panels/summary/SummaryPanel.fxml" StackPane.alignment="TOP_CENTER" />
+               </children>
+            </StackPane>
+         </children>
+      </VBox>      
+   </content>
+</ScrollPane>

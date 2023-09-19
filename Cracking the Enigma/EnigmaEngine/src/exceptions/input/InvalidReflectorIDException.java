@@ -2,7 +2,7 @@ package exceptions.input;
 
 public class InvalidReflectorIDException extends Exception {
     private final String enteredReflectorID;
-    private final String EXCEPTION_MESSAGE = "Error - Invalid rotor ID entered: \"%s\"! You must enter a number from the list!";
+    private final String EXCEPTION_MESSAGE = "Invalid rotor ID entered: \"%s\"! You must enter a number from the list!";
 
     public InvalidReflectorIDException(String enteredReflectorID) {
         this.enteredReflectorID = enteredReflectorID;

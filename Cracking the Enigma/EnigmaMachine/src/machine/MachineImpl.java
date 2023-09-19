@@ -1,5 +1,6 @@
 package machine;
 
+import machine.components.dictionary.Dictionary;
 import machine.components.history.MachineHistory;
 import object.machine.history.MachineHistoryPerConfiguration;
 import machine.components.keyboard.Keyboard;
@@ -17,18 +18,22 @@ import java.util.*;
 
 public class MachineImpl implements Machine {
     private final Keyboard keyboard;
-    private final MachineStorage machineStorage;
-    private final MachineHistory machineHistory = new MachineHistory();
+    private final Dictionary dictionary;
     private final int activeRotorsCount;
+    private final int agentsCount;
+    private MachineStorage machineStorage;
+    private MachineHistory machineHistory = new MachineHistory();
     private PlugBoard plugBoard;
     private List<Rotor> activeRotors;
     private Reflector activeReflector;
     private MachineConfiguration initialConfiguration = null;
 
-    public MachineImpl(Keyboard keyboard, MachineStorage machineStorage, int activeRotorsCount) {
+    public MachineImpl(Keyboard keyboard, MachineStorage machineStorage, Dictionary dictionary, int activeRotorsCount, int agentsCount) {
         this.keyboard = keyboard;
         this.machineStorage = machineStorage;
+        this.dictionary = dictionary;
         this.activeRotorsCount = activeRotorsCount;
+        this.agentsCount = agentsCount;
     }
 
     @Override
@@ -70,7 +75,7 @@ public class MachineImpl implements Machine {
     }
 
     @Override
-    public void setConfiguration(MachineConfiguration machineConfiguration) {
+    public void setConfiguration(MachineConfiguration machineConfiguration, boolean saveToHistory) {
         initialConfiguration = machineConfiguration;
         setActiveRotors(machineConfiguration.getRotorIDsInOrder());
         setActiveReflector(machineConfiguration.getReflectorID());
@@ -82,7 +87,7 @@ public class MachineImpl implements Machine {
 
     @Override
     public void resetConfiguration() {
-        setConfiguration(initialConfiguration);
+        setConfiguration(initialConfiguration, true);
     }
 
     @Override
@@ -104,6 +109,11 @@ public class MachineImpl implements Machine {
     }
 
     @Override
+    public MachineConfiguration getInitialMachineConfiguration() {
+        return initialConfiguration;
+    }
+
+    @Override
     public List<Character> getAllKeys() {
         return keyboard.getAllKeys();
     }
@@ -111,6 +121,16 @@ public class MachineImpl implements Machine {
     @Override
     public boolean isConfigurationSet() {
         return initialConfiguration != null;
+    }
+
+    @Override
+    public MachineStorage getMachineStorage() {
+        return machineStorage;
+    }
+
+    @Override
+    public Dictionary getDictionary() {
+        return dictionary;
     }
 
     private Map<Integer, Integer> getRotorIDToRotationsLeftForNotchPerRotor() {
@@ -167,7 +187,7 @@ public class MachineImpl implements Machine {
     }
 
     @Override
-    public String processInput(String stringToProcess) {
+    public String processInput(String stringToProcess, boolean addMessageToHistory, boolean saveMessageForLater) {
         StringBuilder resultString = new StringBuilder();
         Long timeStart = System.nanoTime();
 
@@ -175,9 +195,17 @@ public class MachineImpl implements Machine {
             resultString.append(processSingleChar(currChar));
         }
         Long timeEnd = System.nanoTime();
-        machineHistory.addMessageToHistory(initialConfiguration, stringToProcess, resultString.toString(), timeEnd - timeStart);
+        if (addMessageToHistory) {
+            machineHistory.addMessageToHistory(initialConfiguration, stringToProcess, resultString.toString(), timeEnd - timeStart);
+        } else if (saveMessageForLater) {
+            machineHistory.saveMessageForLater(initialConfiguration, stringToProcess, resultString.toString(), timeEnd - timeStart);
+        }
 
         return resultString.toString();
+    }
+
+    public void insertAccumulatedMessageToHistory() {
+        machineHistory.insertAccumulatedMessageToHistory();
     }
 
     private Character processSingleChar(Character charToProcess) {
@@ -236,5 +264,34 @@ public class MachineImpl implements Machine {
         }
 
         return resultKeyIndex;
+    }
+
+    @Override
+    public Machine clone() {
+        try {
+            MachineImpl clone = (MachineImpl) super.clone();
+
+            clone.initialConfiguration = initialConfiguration.clone();
+            clone.machineStorage = machineStorage.clone();
+            clone.activeRotors = new ArrayList<>();
+            activeRotors.forEach(originalRotor -> {
+                clone.machineStorage.getAllRotors().forEach(rotorCopy -> {
+                    if (rotorCopy.getRotorID() == originalRotor.getRotorID()) {
+                        clone.activeRotors.add(rotorCopy);
+                    }
+                });
+            });
+            clone.activeReflector = activeReflector.clone();
+            clone.machineHistory = new MachineHistory();
+
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
+    @Override
+    public int getAgentsCount() {
+        return agentsCount;
     }
 }

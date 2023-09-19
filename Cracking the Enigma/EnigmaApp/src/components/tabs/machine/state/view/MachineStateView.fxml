@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox minWidth="-Infinity" stylesheets="@../../../../../enigma/app/EnigmaApp.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.tabs.machine.state.view.MachineStateView">
+   <children>
+      <HBox spacing="10.0">
+         <children>
+            <Label styleClass="sub-header-label" text="Number of active rotors:">
+               <font>
+                  <Font name="Berlin Sans FB" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="activeRotorsCount" styleClass="value-label">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox spacing="10.0">
+         <children>
+            <VBox spacing="10.0">
+               <children>
+                  <Label styleClass="sub-header-label" text="Amount of reflectors in storage:">
+                     <font>
+                        <Font name="Berlin Sans FB" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label styleClass="sub-header-label" text="Amount of messages processed:">
+                     <font>
+                        <Font name="Berlin Sans FB" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox spacing="10.0">
+               <children>
+                  <Label fx:id="reflectorsInStorageCount" styleClass="value-label">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="processedMessagesCount" styleClass="value-label">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets right="10.0" />
+   </padding>
+</VBox>

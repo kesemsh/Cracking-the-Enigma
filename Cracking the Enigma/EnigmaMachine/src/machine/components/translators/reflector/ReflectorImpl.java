@@ -17,4 +17,15 @@ public class ReflectorImpl implements Reflector {
     public int translate(int indexToTranslate) {
         return indexTranslationList.get(indexToTranslate);
     }
+
+    @Override
+    public Reflector clone() {
+        try {
+            ReflectorImpl clone = (ReflectorImpl) super.clone();
+
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

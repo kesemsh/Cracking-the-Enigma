@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="600.0" prefWidth="800.0" styleClass="root" stylesheets="@EnigmaApp.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="enigma.app.EnigmaApp">
+   <content>
+      <VBox alignment="TOP_CENTER">
+         <children>
+            <Label id="app-title" alignment="CENTER" minWidth="0.0" text="The Magic Enigma" textAlignment="CENTER">
+               <font>
+                  <Font name="Berlin Sans FB" size="35.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../resources/images/EnigmaInColor.jpg" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+            <VBox spacing="10.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Separator prefWidth="200.0" />
+                  <fx:include fx:id="fileManager" source="../../components/file/manager/FileManager.fxml" />
+                  <Separator prefWidth="200.0" />
+                  <fx:include fx:id="tabsManager" source="../../components/tabs/manager/TabsManager.fxml" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

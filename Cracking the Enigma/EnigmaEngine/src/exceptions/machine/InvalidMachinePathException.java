@@ -3,7 +3,7 @@ package exceptions.machine;
 import java.io.IOException;
 
 public class InvalidMachinePathException extends IOException {
-    private final String EXCEPTION_MESSAGE = "Error - Input is not a valid machine file path!";
+    private final String EXCEPTION_MESSAGE = "Input is not a valid machine file path!";
 
     @Override
     public String getMessage() {

@@ -2,7 +2,7 @@ package machine.components.rotor;
 
 import java.io.Serializable;
 
-public interface Rotor extends Rotatable, Serializable {
+public interface Rotor extends Rotatable, Serializable, Cloneable {
     int getRotorID();
 
     int getRotorPosition();
@@ -16,4 +16,6 @@ public interface Rotor extends Rotatable, Serializable {
     int getCurrentPositionKeyIndex();
 
     int translate(Direction directionOfTranslation, int indexToTranslate);
+
+    Rotor clone();
 }

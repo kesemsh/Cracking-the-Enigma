@@ -58,4 +58,16 @@ public class RotorImpl implements Rotor {
     public int translate(Direction directionOfTranslation, int indexToTranslate) {
         return directionToIndexTranslationList.get(directionOfTranslation).get(indexToTranslate);
     }
+
+    @Override
+    public Rotor clone() {
+        try {
+            RotorImpl clone = (RotorImpl) super.clone();
+
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
