@@ -2,6 +2,9 @@ package object.machine.state;
 
 import object.machine.configuration.MachineConfiguration;
 
+import java.util.List;
+import java.util.Set;
+
 public class MachineState {
     private final int availableRotorsCount;
     private final int activeRotorsCount;
@@ -9,21 +12,27 @@ public class MachineState {
     private final int processedMessagesCount;
     private final MachineConfiguration initialConfiguration;
     private final MachineConfiguration currentConfiguration;
+    private final List<Character> allKeys;
+    private final Set<String> allowedWords;
 
-    public MachineState(int availableRotorsCount, int activeRotorsCount, int reflectorsInStorageCount, int processedMessagesCount) {
+    public MachineState(int availableRotorsCount, int activeRotorsCount, int reflectorsInStorageCount, int processedMessagesCount, List<Character> allKeys, Set<String> allowedWords) {
         this.availableRotorsCount = availableRotorsCount;
         this.activeRotorsCount = activeRotorsCount;
         this.reflectorsInStorageCount = reflectorsInStorageCount;
         this.processedMessagesCount = processedMessagesCount;
+        this.allKeys = allKeys;
+        this.allowedWords = allowedWords;
         initialConfiguration = null;
         currentConfiguration = null;
     }
 
-    public MachineState(int availableRotorsCount, int activeRotorsCount, int reflectorsInStorageCount, int processedMessagesCount, MachineConfiguration initialConfiguration, MachineConfiguration currentConfiguration) {
+    public MachineState(int availableRotorsCount, int activeRotorsCount, int reflectorsInStorageCount, int processedMessagesCount, List<Character> allKeys, Set<String> allowedWords, MachineConfiguration initialConfiguration, MachineConfiguration currentConfiguration) {
         this.availableRotorsCount = availableRotorsCount;
         this.activeRotorsCount = activeRotorsCount;
         this.reflectorsInStorageCount = reflectorsInStorageCount;
         this.processedMessagesCount = processedMessagesCount;
+        this.allKeys = allKeys;
+        this.allowedWords = allowedWords;
         this.initialConfiguration = initialConfiguration;
         this.currentConfiguration = currentConfiguration;
     }
@@ -42,6 +51,14 @@ public class MachineState {
 
     public int getProcessedMessagesCount() {
         return processedMessagesCount;
+    }
+
+    public List<Character> getAllKeys() {
+        return allKeys;
+    }
+
+    public Set<String> getAllowedWords() {
+        return allowedWords;
     }
 
     public MachineConfiguration getInitialConfiguration() {

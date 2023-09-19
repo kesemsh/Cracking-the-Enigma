@@ -1,7 +1,6 @@
 package machine.automatic.decryption.task.results.reader;
 
-import javafx.beans.property.BooleanProperty;
-import machine.automatic.decryption.task.results.DecryptionTaskResults;
+import object.automatic.decryption.results.DecryptionTaskResults;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;

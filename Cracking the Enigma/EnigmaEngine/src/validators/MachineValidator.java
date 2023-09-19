@@ -2,24 +2,30 @@ package validators;
 
 import exceptions.machine.XMLLogicException;
 import jaxb.generated.*;
+import object.automatic.decryption.difficulty.DecryptionDifficulty;
 import object.numbering.RomanNumber;
 import java.util.*;
+import java.util.function.Predicate;
 
 public class MachineValidator {
-    private  String abc;
+    private String abc;
     private CTEMachine cteMachine;
     private CTEDecipher cteDecipher;
+    private CTEBattlefield cteBattlefield;
     private List<CTERotor> allRotors;
     private List<CTEReflector> allReflectors;
     private long ABCCount;
 
-    public void checkCTEEnigma(CTEEnigma enigma) throws XMLLogicException {
+    public void checkCTEEnigma(CTEEnigma enigma, Predicate<String> doesGameTitleAlreadyExist) throws XMLLogicException {
         try {
             updateDataMembers(enigma);
             isABCEven();
             isRotorsCountValid();
             doesDecipherExist();
-            isAgentsCountValid();
+            doesBattlefieldExist();
+            checkIfGameTitleAlreadyExists(doesGameTitleAlreadyExist);
+            isDecryptionDifficultyValid();
+            isAlliesCountValid();
             isMachineRotorsVSAllRotorsCountValid();
             isRotorsIDsUnique();
             isRotorsMappingValid();
@@ -32,6 +38,30 @@ public class MachineValidator {
         }
     }
 
+    private void doesBattlefieldExist() throws XMLLogicException {
+        if (cteBattlefield == null) {
+            throw new XMLLogicException("No battlefield detected! Please enter a new XML file!");
+        }
+    }
+
+    private void isAlliesCountValid() throws XMLLogicException {
+        if (cteBattlefield.getAllies() <= 0) {
+            throw new XMLLogicException("Allies count must be above 0!");
+        }
+    }
+
+    private void isDecryptionDifficultyValid() throws XMLLogicException {
+        if (DecryptionDifficulty.fromString(cteBattlefield.getLevel()) == null) {
+            throw new XMLLogicException("Decryption difficulty is invalid!");
+        }
+    }
+
+    private void checkIfGameTitleAlreadyExists(Predicate<String> doesGameTitleAlreadyExist) throws XMLLogicException {
+        if (doesGameTitleAlreadyExist.test(cteBattlefield.getBattleName())) {
+            throw new XMLLogicException("Game title already exists!");
+        }
+    }
+
     private void doesDecipherExist() throws XMLLogicException {
         if (cteDecipher == null) {
             throw new XMLLogicException("No decipher detected! Please enter a new XML file!");
@@ -41,6 +71,7 @@ public class MachineValidator {
     private void updateDataMembers(CTEEnigma enigma) {
         cteMachine = enigma.getCTEMachine();
         cteDecipher = enigma.getCTEDecipher();
+        cteBattlefield = enigma.getCTEBattlefield();
         CTERotors cteRotors = cteMachine.getCTERotors();
         allRotors = cteRotors.getCTERotor();
         allReflectors = cteMachine.getCTEReflectors().getCTEReflector();
@@ -66,12 +97,6 @@ public class MachineValidator {
     private void isRotorsCountValid() throws XMLLogicException {
         if (cteMachine.getRotorsCount() < 2) {
             throw new XMLLogicException(String.format("Expected rotors count of at least 2, but received %d!", cteMachine.getRotorsCount()));
-        }
-    }
-
-    private void isAgentsCountValid() throws XMLLogicException {
-        if (cteDecipher.getAgents() < 2 || cteDecipher.getAgents() > 50) {
-            throw new XMLLogicException(String.format("Expected agents count of 2 to 50, but received %d!", cteDecipher.getAgents()));
         }
     }
 

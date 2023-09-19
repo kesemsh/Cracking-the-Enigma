@@ -20,7 +20,6 @@ public class MachineImpl implements Machine {
     private final Keyboard keyboard;
     private final Dictionary dictionary;
     private final int activeRotorsCount;
-    private final int agentsCount;
     private MachineStorage machineStorage;
     private MachineHistory machineHistory = new MachineHistory();
     private PlugBoard plugBoard;
@@ -28,12 +27,11 @@ public class MachineImpl implements Machine {
     private Reflector activeReflector;
     private MachineConfiguration initialConfiguration = null;
 
-    public MachineImpl(Keyboard keyboard, MachineStorage machineStorage, Dictionary dictionary, int activeRotorsCount, int agentsCount) {
+    public MachineImpl(Keyboard keyboard, MachineStorage machineStorage, Dictionary dictionary, int activeRotorsCount) {
         this.keyboard = keyboard;
         this.machineStorage = machineStorage;
         this.dictionary = dictionary;
         this.activeRotorsCount = activeRotorsCount;
-        this.agentsCount = agentsCount;
     }
 
     @Override
@@ -67,10 +65,10 @@ public class MachineImpl implements Machine {
         int reflectorsInStorageCount = machineStorage.getAllReflectors().size();
 
         if (initialConfiguration != null) {
-            return new MachineState(possibleRotorsCount, activeRotorsCount, reflectorsInStorageCount, machineHistory.getProcessedMessagesCount(), initialConfiguration, getCurrentMachineConfiguration());
+            return new MachineState(possibleRotorsCount, activeRotorsCount, reflectorsInStorageCount, machineHistory.getProcessedMessagesCount(), getAllKeys(), getAllowedWords(), initialConfiguration, getCurrentMachineConfiguration());
         }
         else {
-            return new MachineState(possibleRotorsCount, activeRotorsCount, reflectorsInStorageCount, machineHistory.getProcessedMessagesCount());
+            return new MachineState(possibleRotorsCount, activeRotorsCount, reflectorsInStorageCount, machineHistory.getProcessedMessagesCount(), getAllKeys(), getAllowedWords());
         }
     }
 
@@ -82,7 +80,10 @@ public class MachineImpl implements Machine {
         setPlugs(machineConfiguration.getPlugsToUse());
         setRotorsStartPositions(machineConfiguration.getRotorStartPositionsByChar());
         initialConfiguration.setRotorNotchPositionsPerID(getRotorIDToRotationsLeftForNotchPerRotor());
-        machineHistory.addConfigurationToHistory(initialConfiguration);
+
+        if (saveToHistory) {
+            machineHistory.addConfigurationToHistory(initialConfiguration);
+        }
     }
 
     @Override
@@ -116,6 +117,11 @@ public class MachineImpl implements Machine {
     @Override
     public List<Character> getAllKeys() {
         return keyboard.getAllKeys();
+    }
+
+    @Override
+    public Set<String> getAllowedWords() {
+        return dictionary.getAllowedWords();
     }
 
     @Override
@@ -271,27 +277,24 @@ public class MachineImpl implements Machine {
         try {
             MachineImpl clone = (MachineImpl) super.clone();
 
-            clone.initialConfiguration = initialConfiguration.clone();
             clone.machineStorage = machineStorage.clone();
-            clone.activeRotors = new ArrayList<>();
-            activeRotors.forEach(originalRotor -> {
-                clone.machineStorage.getAllRotors().forEach(rotorCopy -> {
-                    if (rotorCopy.getRotorID() == originalRotor.getRotorID()) {
-                        clone.activeRotors.add(rotorCopy);
-                    }
+            if (initialConfiguration != null) {
+                clone.initialConfiguration = initialConfiguration.clone();
+                clone.activeRotors = new ArrayList<>();
+                activeRotors.forEach(originalRotor -> {
+                    clone.machineStorage.getAllRotors().forEach(rotorCopy -> {
+                        if (rotorCopy.getRotorID() == originalRotor.getRotorID()) {
+                            clone.activeRotors.add(rotorCopy);
+                        }
+                    });
                 });
-            });
-            clone.activeReflector = activeReflector.clone();
-            clone.machineHistory = new MachineHistory();
+                clone.activeReflector = activeReflector.clone();
+                clone.machineHistory = new MachineHistory();
+            }
 
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
-    }
-
-    @Override
-    public int getAgentsCount() {
-        return agentsCount;
     }
 }

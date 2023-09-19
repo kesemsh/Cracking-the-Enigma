@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ally.screens.tabs.contest.agents.progress.view.AgentsProgressView">
+    <VBox spacing="10.0">
+        <HBox alignment="CENTER">
+            <Label alignment="CENTER" text="Agents Progress">
+                <font>
+                    <Font name="Berlin Sans FB" size="20.0" />
+                </font>
+            </Label>
+        </HBox>
+        <TableView fx:id="agentsProgressTable" maxHeight="-Infinity" prefHeight="200.0">
+            <columns>
+                <TableColumn fx:id="agentNameColumn" minWidth="80.0" prefWidth="-1.0" text="Agent Name" />
+                <TableColumn fx:id="tasksCompletedColumn" minWidth="100.0" prefWidth="-1.0" text="Tasks Completed" />
+                <TableColumn fx:id="totalPulledTasksColumn" minWidth="110.0" prefWidth="-1.0" text="Total Pulled Tasks" />
+                <TableColumn fx:id="foundCandidatesColumn" minWidth="110.0" prefWidth="-1.0" text="Found Candidates" />
+            </columns>
+        </TableView>
+    </VBox>
+</ScrollPane>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ally.screens.tabs.contest.dm.progress.view.DMProgressView">
+    <VBox minWidth="-Infinity" prefWidth="200.0" spacing="10.0">
+        <children>
+            <HBox alignment="CENTER">
+                <Label alignment="CENTER" text="DM Progress" underline="true">
+                    <font>
+                        <Font name="Berlin Sans FB" size="25.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets bottom="-5.0" />
+                    </HBox.margin>
+                </Label>
+            </HBox>
+            <HBox>
+                <children>
+                    <Label text="Total Tasks: ">
+                        <font>
+                            <Font name="Berlin Sans FB" size="18.0" />
+                        </font>
+                    </Label>
+                    <Label fx:id="totalTasksLabel" layoutX="10.0" layoutY="10.0">
+                        <font>
+                            <Font name="Berlin Sans FB" size="18.0" />
+                        </font>
+                    </Label>
+                </children>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="10.0">
+                <children>
+                    <Label text="Created Tasks: ">
+                        <font>
+                            <Font name="Berlin Sans FB" size="18.0" />
+                        </font>
+                    </Label>
+                    <Label fx:id="createdTasksLabel" layoutX="10.0" layoutY="10.0">
+                        <font>
+                            <Font name="Berlin Sans FB" size="18.0" />
+                        </font>
+                    </Label>
+                </children>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="37.0">
+                <children>
+                    <Label text="Tasks Completed: ">
+                        <font>
+                            <Font name="Berlin Sans FB" size="18.0" />
+                        </font>
+                    </Label>
+                    <Label fx:id="tasksCompletedLabel" layoutX="10.0" layoutY="10.0">
+                        <font>
+                            <Font name="Berlin Sans FB" size="18.0" />
+                        </font>
+                    </Label>
+                </children>
+            </HBox>
+        </children>
+    </VBox>
+</ScrollPane>

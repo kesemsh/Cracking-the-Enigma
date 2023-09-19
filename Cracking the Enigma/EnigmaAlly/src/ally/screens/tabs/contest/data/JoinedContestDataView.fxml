@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox minWidth="-Infinity" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ally.screens.tabs.contest.data.JoinedContestDataView">
+   <children>
+      <HBox>
+         <children>
+            <Label alignment="TOP_LEFT" text="Contest Data:" underline="true">
+               <font>
+                  <Font name="Berlin Sans FB" size="25.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox spacing="10.0">
+         <children>
+            <VBox spacing="10.0">
+               <children>
+                  <Label minHeight="-Infinity" minWidth="-Infinity" text="Game title:">
+                     <font>
+                        <Font name="Berlin Sans FB" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label minHeight="-Infinity" minWidth="-Infinity" text="UBoat name:">
+                     <font>
+                        <Font name="Berlin Sans FB" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label minHeight="-Infinity" minWidth="-Infinity" text="Game In Progress:">
+                     <font>
+                        <Font name="Berlin Sans FB" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="72.0" minHeight="-Infinity" minWidth="-Infinity" text="Decryption difficulty:">
+                     <font>
+                        <Font name="Berlin Sans FB" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="103.0" minHeight="-Infinity" minWidth="-Infinity" text="Allies count:">
+                     <font>
+                        <Font name="Berlin Sans FB" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="134.0" minHeight="-Infinity" minWidth="-Infinity" text="Message to decrypt:">
+                     <font>
+                        <Font name="Berlin Sans FB" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox layoutX="362.0" layoutY="10.0" spacing="10.0">
+               <children>
+                  <Label fx:id="gameTitleLabel" minHeight="-Infinity" minWidth="-Infinity">
+                     <font>
+                        <Font name="Berlin Sans FB" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="uBoatNameLabel" minHeight="-Infinity" minWidth="-Infinity">
+                     <font>
+                        <Font name="Berlin Sans FB" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="gameInProgressLabel" minHeight="-Infinity" minWidth="-Infinity">
+                     <font>
+                        <Font name="Berlin Sans FB" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="decryptionDifficultyLabel" layoutX="10.0" layoutY="72.0" minHeight="-Infinity" minWidth="-Infinity">
+                     <font>
+                        <Font name="Berlin Sans FB" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="alliesCountLabel" layoutX="10.0" layoutY="103.0" minHeight="-Infinity" minWidth="-Infinity">
+                     <font>
+                        <Font name="Berlin Sans FB" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="messageToDecryptLabel" layoutX="10.0" layoutY="134.0" minHeight="-Infinity" minWidth="-Infinity">
+                     <font>
+                        <Font name="Berlin Sans FB" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>

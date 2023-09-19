@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uboat.screens.main.tabs.manager.TabsManager">
+    <children>
+        <HBox alignment="TOP_CENTER" spacing="10.0" VBox.vgrow="NEVER">
+            <children>
+                <Button fx:id="machineTabButton" alignment="CENTER" contentDisplay="CENTER" minWidth="125.0" mnemonicParsing="false" onAction="#selectMachineTab" styleClass="tab-button" text="Machine" />
+                <Button fx:id="contestTabButton" alignment="CENTER" contentDisplay="CENTER" minWidth="125.0" mnemonicParsing="false" onAction="#selectContestTab" styleClass="tab-button" text="Contest" />
+            </children>
+            <VBox.margin>
+                <Insets left="5.0" right="5.0" top="5.0" />
+            </VBox.margin>
+        </HBox>
+        <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
+            <content>
+                <StackPane style="-fx-background-color: gray;">
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                    <children>
+                        <fx:include fx:id="machineTab" source="../machine/MachineTab.fxml" />
+                        <fx:include fx:id="contestTab" source="../contest/ContestTab.fxml" />
+                    </children>
+                </StackPane>
+            </content>
+        </ScrollPane>
+    </children>
+</VBox>

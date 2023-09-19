@@ -1,22 +1,24 @@
 package machine.engine;
 
+import battlefield.Battlefield;
 import exceptions.input.*;
 import exceptions.machine.*;
-import machine.automatic.decryption.decrypted.message.candidate.DecryptedMessageCandidate;
-import machine.automatic.decryption.input.data.DecryptionInputData;
-import machine.automatic.decryption.pre.decryption.data.PreDecryptionData;
+import machine.Machine;
 import machine.components.dictionary.Dictionary;
+import object.automatic.decryption.data.pre.decryption.PreDecryptionData;
 import object.machine.history.MachineHistoryPerConfiguration;
 import object.machine.configuration.MachineConfiguration;
 import object.machine.state.MachineState;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.InvalidPathException;
 import java.util.List;
+import java.util.function.Predicate;
 
 public interface MachineEngine {
-    void loadMachineFromXMLFile(String xmlFilePath) throws InvalidPathException, IOException, JAXBException, XMLLogicException, EmptyInputException;
+    Battlefield loadMachineFromXMLFile(InputStream xmlFileStream, Predicate<String> doesBattlefieldNameExist) throws InvalidPathException, IOException, JAXBException, XMLLogicException;
 
     int getActiveRotorsCountInMachine() throws MachineNotLoadedException;
 
@@ -56,29 +58,11 @@ public interface MachineEngine {
 
     void insertAccumulatedMessageToHistory();
 
-    void saveMachineToMAGICFile(String filePath) throws MachineNotLoadedException, MachineSaveException;
-
-    void loadMachineFromMAGICFile(String filePath) throws MachineNotLoadedException, IOException, EmptyInputException, ClassNotFoundException, MachineLoadException;
-
     List<Character> getAllKeys();
 
     boolean isConfigurationSet();
 
-    PreDecryptionData getPreDecryptionData(DecryptionInputData decryptionInputData) throws InvalidWordException;
-
-    void startAutomaticDecryption();
-
-    void pauseAutomaticDecryption();
-
-    void resumeAutomaticDecryption();
-
-    void stopAutomaticDecryption();
+    PreDecryptionData getPreDecryptionData(String messageToDecrypt) throws InvalidWordException;
 
     Dictionary getDictionary();
-
-    int getAgentsCount();
-
-    void checkIfPaused();
-
-    boolean isDecryptedMessageCorrect(DecryptedMessageCandidate decryptedMessageCandidate);
 }

@@ -1,10 +1,13 @@
 package machine.builder;
 
+import battlefield.Battlefield;
 import jaxb.generated.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import machine.Machine;
 import machine.components.dictionary.Dictionary;
+import object.automatic.decryption.difficulty.DecryptionDifficulty;
 import object.numbering.RomanNumber;
 
 import machine.MachineImpl;
@@ -22,7 +25,7 @@ public class MachineBuilder {
         MachineStorage machineStorage = buildStorageFromCTEEnigma(cteEnigma, keyboard);
         Dictionary dictionary = buildDictionaryFromCTEEnigma(cteEnigma);
 
-        return new MachineImpl(keyboard, machineStorage, dictionary, cteEnigma.getCTEMachine().getRotorsCount(), cteEnigma.getCTEDecipher().getAgents());
+        return new MachineImpl(keyboard, machineStorage, dictionary, cteEnigma.getCTEMachine().getRotorsCount());
     }
 
     private Dictionary buildDictionaryFromCTEEnigma(CTEEnigma cteEnigma) {
@@ -102,5 +105,9 @@ public class MachineBuilder {
         directionToIndexTranslationList.put(Direction.Backwards, backwardsIndexTranslationList);
 
         return new RotorImpl(cteRotor.getId(), cteRotor.getNotch() - 1, directionToIndexTranslationList, keyIndexToRightSidePosition, rightSidePositionToKeyIndex, keyboard.getKeyCount());
+    }
+
+    public Battlefield buildBattlefield(CTEEnigma cteEnigma, Machine machine) {
+        return new Battlefield(machine, cteEnigma.getCTEBattlefield().getBattleName(), cteEnigma.getCTEBattlefield().getAllies(), DecryptionDifficulty.fromString(cteEnigma.getCTEBattlefield().getLevel()));
     }
 }

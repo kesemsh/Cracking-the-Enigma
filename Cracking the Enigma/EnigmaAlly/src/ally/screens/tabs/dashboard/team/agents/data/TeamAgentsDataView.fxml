@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ally.screens.tabs.dashboard.team.agents.data.TeamAgentsDataView">
+    <content>
+        <VBox spacing="10.0">
+            <children>
+                <HBox alignment="CENTER">
+                    <children>
+                        <Label alignment="TOP_LEFT" text="Team's Agents Data">
+                            <font>
+                                <Font name="Berlin Sans FB" size="20.0" />
+                            </font>
+                            <graphic>
+                                <ImageView fitHeight="30.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../../../../../resources/images/TeamAgentsData.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <HBox.margin>
+                                <Insets bottom="-5.0" />
+                            </HBox.margin>
+                        </Label>
+                    </children>
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </HBox>
+                  <TableView fx:id="teamAgentsDataTableView" minHeight="200.0" prefHeight="300.0" VBox.vgrow="ALWAYS">
+                      <columns>
+                          <TableColumn fx:id="agentNameColumn" maxWidth="-1.0" minWidth="130.0" prefWidth="130.0" text="Agent's Name" />
+                          <TableColumn fx:id="threadCountColumn" maxWidth="-1.0" minWidth="130.0" prefWidth="130.0" text="Threads Count" />
+                          <TableColumn fx:id="taskSizeColumn" maxWidth="-1.0" minWidth="130.0" prefWidth="130.0" text="Task Size" />
+                      </columns>
+                  </TableView>
+            </children>
+        </VBox>
+    </content>
+</ScrollPane>

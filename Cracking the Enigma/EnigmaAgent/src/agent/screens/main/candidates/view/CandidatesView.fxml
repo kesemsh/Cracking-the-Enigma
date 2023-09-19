@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="agent.screens.main.candidates.view.CandidatesView">
+   <content>
+      <VBox spacing="10.0">
+         <children>
+            <HBox alignment="CENTER">
+               <children>
+                  <Label alignment="TOP_LEFT" text="Decrypted Messages Candidates">
+                     <font>
+                        <Font name="Berlin Sans FB" size="20.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="23.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="/resources/images/Message.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <HBox.margin>
+                        <Insets bottom="-5.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+            <TableView fx:id="decryptedMessageCandidatesTable" maxHeight="300.0" VBox.vgrow="ALWAYS">
+               <columns>
+                  <TableColumn fx:id="messageFoundColumn" minWidth="100.0" prefWidth="-1.0" text="Message Found" />
+                  <TableColumn fx:id="configurationFoundColumn" minWidth="130.0" prefWidth="-1.0" text="Configuration Found" />
+                  <TableColumn fx:id="taskDetailsColumn" minWidth="130.0" prefWidth="-1.0" text="Task Details" />
+               </columns>
+            </TableView>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

@@ -1,16 +1,14 @@
 package machine.engine;
 
+import battlefield.Battlefield;
 import exceptions.input.*;
 import exceptions.machine.*;
-import machine.automatic.decryption.decrypted.message.candidate.DecryptedMessageCandidate;
-import machine.automatic.decryption.input.data.DecryptionInputData;
-import machine.automatic.decryption.manager.DecryptionManager;
-import machine.automatic.decryption.pre.decryption.data.PreDecryptionData;
 import machine.builder.MachineBuilder;
 import jaxb.generated.CTEEnigma;
 import jaxb.xml.reader.XMLReader;
 import machine.Machine;
 import machine.components.dictionary.Dictionary;
+import object.automatic.decryption.data.pre.decryption.PreDecryptionData;
 import object.machine.history.MachineHistoryPerConfiguration;
 import object.machine.configuration.MachineConfiguration;
 import validators.InputValidator;
@@ -20,28 +18,26 @@ import object.numbering.RomanNumber;
 
 import javax.xml.bind.JAXBException;
 import java.io.*;
-import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
-import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Predicate;
 
 public class MachineEngineImpl implements MachineEngine {
     private Machine machine = null;
     private boolean isConfigurationSet = false;
-    private DecryptionManager decryptionManager;
     private final MachineValidator machineValidator = new MachineValidator();
     private final MachineBuilder machineBuilder = new MachineBuilder();
     private final InputValidator inputValidator = new InputValidator();
 
     @Override
-    public void loadMachineFromXMLFile(String xmlFilePath) throws InvalidPathException, IOException, JAXBException, XMLLogicException, EmptyInputException {
-        inputValidator.checkFilePath(xmlFilePath, ".xml");
+    public Battlefield loadMachineFromXMLFile(InputStream xmlFileStream, Predicate<String> doesBattlefieldNameExist) throws InvalidPathException, IOException, JAXBException, XMLLogicException {
+        CTEEnigma cteEnigma = XMLReader.getEnigmaFromXMLFile(xmlFileStream);
 
-        CTEEnigma cteEnigma = XMLReader.getEnigmaFromXMLFile(xmlFilePath);
-
-        machineValidator.checkCTEEnigma(cteEnigma);
+        machineValidator.checkCTEEnigma(cteEnigma, doesBattlefieldNameExist);
         machine = machineBuilder.buildEnigmaMachine(cteEnigma);
         isConfigurationSet = false;
+
+        return machineBuilder.buildBattlefield(cteEnigma, machine);
     }
 
     @Override
@@ -237,37 +233,6 @@ public class MachineEngineImpl implements MachineEngine {
     }
 
     @Override
-    public void saveMachineToMAGICFile(String filePath) throws MachineNotLoadedException, MachineSaveException {
-        checkIfMachineIsLoaded();
-
-        if (filePath.isEmpty()) {
-            throw new MachineSaveException("Machine save file name must not be empty!");
-        }
-
-        try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(Paths.get(filePath)))) {
-            out.writeObject(machine);
-        } catch (Exception e) {
-            throw new MachineSaveException();
-        }
-    }
-
-    @Override
-    public void loadMachineFromMAGICFile(String filePath) throws IOException, EmptyInputException, MachineLoadException {
-
-        if (filePath.isEmpty()) {
-            throw new MachineLoadException("Machine load file name must not be empty!");
-        }
-
-        inputValidator.checkFilePath(filePath, ".magic");
-        try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(Paths.get(filePath)))) {
-            machine = (Machine) in.readObject();
-            isConfigurationSet = machine.isConfigurationSet();
-        } catch (Exception e) {
-            throw new MachineLoadException();
-        }
-    }
-
-    @Override
     public List<Character> getAllKeys() {
         return machine.getAllKeys();
     }
@@ -278,57 +243,18 @@ public class MachineEngineImpl implements MachineEngine {
     }
 
     @Override
-    public PreDecryptionData getPreDecryptionData(DecryptionInputData decryptionInputData) throws InvalidWordException {
-        Machine machineClone = machine.clone();
-        String originalMessageWithoutExcludedCharacters = machineClone.getDictionary().getMessageWithoutExcludedCharacters(decryptionInputData.getOriginalMessage().toUpperCase());
+    public PreDecryptionData getPreDecryptionData(String inputMessage) throws InvalidWordException {
+        String originalMessageWithoutExcludedCharacters = machine.getDictionary().getMessageWithoutExcludedCharacters(inputMessage.toUpperCase());
+        MachineConfiguration currentConfiguration = machine.getCurrentMachineConfiguration();
 
-        machineClone.setConfiguration(machine.getCurrentMachineConfiguration(), false);
-        inputValidator.checkIfMessageIncludesOnlyWordsFromDictionary(originalMessageWithoutExcludedCharacters, machineClone.getDictionary());
+        inputValidator.checkIfMessageIncludesOnlyWordsFromDictionary(originalMessageWithoutExcludedCharacters, machine.getDictionary());
+        String messageToDecrypt = machine.processInput(originalMessageWithoutExcludedCharacters, true, false);
 
-        decryptionInputData.setOriginalMessage(originalMessageWithoutExcludedCharacters);
-        decryptionInputData.setMessageToDecrypt(machine.processInput(originalMessageWithoutExcludedCharacters, true, false));
-        decryptionManager = new DecryptionManager(decryptionInputData, machineClone);
-
-        return new PreDecryptionData(decryptionManager.getAmountOfTotalTasks(), originalMessageWithoutExcludedCharacters, decryptionInputData.getMessageToDecrypt());
-    }
-
-    @Override
-    public void startAutomaticDecryption() {
-        decryptionManager.startAutomaticDecryption();
-    }
-
-    @Override
-    public void pauseAutomaticDecryption() {
-        decryptionManager.pauseAutomaticDecryption();
-    }
-
-    @Override
-    public void resumeAutomaticDecryption() {
-        decryptionManager.resumeAutomaticDecryption();
-    }
-
-    @Override
-    public void stopAutomaticDecryption() {
-        decryptionManager.stopAutomaticDecryption();
+        return new PreDecryptionData(inputMessage.toUpperCase(), originalMessageWithoutExcludedCharacters, messageToDecrypt, currentConfiguration);
     }
 
     @Override
     public Dictionary getDictionary() {
         return machine.getDictionary();
-    }
-
-    @Override
-    public int getAgentsCount() {
-        return machine.getAgentsCount();
-    }
-
-    @Override
-    public void checkIfPaused() {
-        decryptionManager.checkIfPaused();
-    }
-
-    @Override
-    public boolean isDecryptedMessageCorrect(DecryptedMessageCandidate decryptedMessageCandidate) {
-        return decryptionManager.isDecryptedMessageCorrect(decryptedMessageCandidate);
     }
 }

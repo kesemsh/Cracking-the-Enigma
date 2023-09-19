@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uboat.UBoat">
+   <StackPane>
+      <children>
+        <Label id="app-title" alignment="CENTER" minWidth="0.0" text="UBoat" textAlignment="CENTER">
+            <font>
+                <Font name="Berlin Sans FB" size="35.0" />
+            </font>
+            <graphic>
+                <ImageView fitHeight="50.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../resources/images/UBoat.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Label>
+        <AnchorPane StackPane.alignment="CENTER">
+            <children>
+           <VBox fx:id="greetingLabelsVBox" alignment="CENTER" layoutX="720.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <children>
+                 <HBox alignment="CENTER">
+                    <children>
+                       <Label text="Hello, " />
+                       <Label fx:id="usernameValueLabel" />
+                       <Label layoutX="10.0" layoutY="10.0" text="!" />
+                    </children>
+                 </HBox>
+                      <Button fx:id="logoutButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#logout" prefHeight="35.0" prefWidth="60.0" text="Logout" VBox.vgrow="NEVER">
+                          <font>
+                              <Font name="System Bold" size="12.0" />
+                          </font>
+                      </Button>
+              </children>
+              <padding>
+                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+              </padding>
+           </VBox>
+            </children>
+        </AnchorPane>
+      </children>
+   </StackPane>
+    <StackPane>
+        <fx:include fx:id="loginScreen" source="screens/login/LoginScreen.fxml" />
+        <fx:include fx:id="mainScreen" source="screens/main/MainScreen.fxml" />
+    </StackPane>
+ </VBox>

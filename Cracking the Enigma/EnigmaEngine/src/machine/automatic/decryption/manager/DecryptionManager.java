@@ -1,11 +1,10 @@
 package machine.automatic.decryption.manager;
 
 import machine.Machine;
-import machine.automatic.decryption.decrypted.message.candidate.DecryptedMessageCandidate;
-import machine.automatic.decryption.difficulty.DecryptionDifficulty;
-import machine.automatic.decryption.input.data.DecryptionInputData;
+import object.automatic.decryption.data.input.DecryptionInputData;
 import machine.automatic.decryption.task.creator.DecryptionTasksCreator;
-import machine.automatic.decryption.task.results.DecryptionTaskResults;
+import object.automatic.decryption.data.task.details.DecryptionTaskDetails;
+import object.automatic.decryption.results.DecryptionTaskResults;
 import machine.automatic.decryption.task.results.reader.DecryptionTasksResultsReader;
 
 import java.util.*;
@@ -13,91 +12,47 @@ import java.util.concurrent.*;
 import java.util.function.Consumer;
 
 public class DecryptionManager {
-    private final DecryptionTasksResultsReader decryptionTasksResultsReader;
-    private final BlockingQueue<DecryptionTaskResults> resultsQueue;
-    private final DecryptionTasksCreator decryptionTasksCreator;
-    private final BlockingQueue<Runnable> tasksQueue;
-    private final Map<Integer, Machine> agentIDToMachine;
-    private final Machine machineCopy;
-    private final int agentsCount;
-    private final int tasksQueueSize = 1000;
-    private final ThreadPoolExecutor automaticDecryptionThreadPool;
-    private final Consumer<DecryptionTaskResults> onDecryptionTaskResultsReceived;
+//    private final DecryptionTasksResultsReader decryptionTasksResultsReader;
+//    private final BlockingQueue<DecryptionTaskResults> resultsQueue;
+//    private final Consumer<DecryptionTaskResults> onDecryptionTaskResultsReceived;
+
     private final int amountOfTotalTasks;
-    private final DecryptionInputData decryptionInputData;
-    private volatile boolean decryptionPaused = false;
+    private final DecryptionTasksCreator decryptionTasksCreator;
+    private final BlockingQueue<DecryptionTaskDetails> tasksQueue;
+    private final int tasksQueueSize = 1000;
 
-    public DecryptionManager(DecryptionInputData decryptionInputData, Machine machineCopy) {
-        this.decryptionInputData = decryptionInputData;
-        this.onDecryptionTaskResultsReceived = decryptionInputData.getOnDecryptionTaskResultsReceived();
-        this.agentsCount = decryptionInputData.getAgentsCount();
+    public DecryptionManager(DecryptionInputData decryptionInputData, Machine machine, Runnable onTaskCreated) {
         tasksQueue = new ArrayBlockingQueue<>(tasksQueueSize);
-        resultsQueue = new LinkedBlockingQueue<>();
-        this.machineCopy = machineCopy;
-        agentIDToMachine = createAllMachineCopiesForAgents();
-        automaticDecryptionThreadPool = new ThreadPoolExecutor(agentsCount, agentsCount, Integer.MAX_VALUE, TimeUnit.SECONDS, tasksQueue, r -> {
-            Thread t = Executors.defaultThreadFactory().newThread(r);
-            t.setDaemon(true);
-            return t;
-        });
-        decryptionTasksCreator = new DecryptionTasksCreator(decryptionInputData, tasksQueue, resultsQueue, machineCopy, agentIDToMachine, this::checkIfPaused);
+        decryptionTasksCreator = new DecryptionTasksCreator(decryptionInputData, machine, tasksQueue, onTaskCreated);
         amountOfTotalTasks = decryptionTasksCreator.getAmountOfTotalTasks();
-        decryptionTasksResultsReader = new DecryptionTasksResultsReader(resultsQueue, onDecryptionTaskResultsReceived, automaticDecryptionThreadPool, amountOfTotalTasks);
-    }
-
-    private Map<Integer, Machine> createAllMachineCopiesForAgents() {
-        Map<Integer, Machine> result = new HashMap<>();
-
-        for (int i = 1; i <= agentsCount; i++) {
-            result.put(i, machineCopy.clone());
-        }
-
-        return result;
+//        resultsQueue = new LinkedBlockingQueue<>();
+//        decryptionTasksResultsReader = new DecryptionTasksResultsReader(resultsQueue, onDecryptionTaskResultsReceived, automaticDecryptionThreadPool, amountOfTotalTasks);
     }
 
     public void startAutomaticDecryption() {
-        automaticDecryptionThreadPool.prestartAllCoreThreads();
         decryptionTasksCreator.start();
-        decryptionTasksResultsReader.start();
+        //decryptionTasksResultsReader.start();
     }
 
-    public void pauseAutomaticDecryption() {
-        if (!decryptionPaused) {
-            decryptionPaused = true;
-        }
-    }
+    public List<DecryptionTaskDetails> getTasks(int tasksAmount) {
+        List<DecryptionTaskDetails> tasksList = new ArrayList<>();
 
-    public void resumeAutomaticDecryption() {
-        if (decryptionPaused) {
-            decryptionPaused = false;
-            synchronized (this) {
-                this.notifyAll();
+        try {
+            for (int i = 0; i < tasksAmount; i++) {
+                synchronized (tasksQueue) {
+                    tasksList.add(tasksQueue.remove());
+                }
             }
-        }
-    }
+        } catch (Exception e) {}
 
-    public void stopAutomaticDecryption() {
-        automaticDecryptionThreadPool.shutdown();
-        automaticDecryptionThreadPool.shutdownNow();
-        decryptionTasksCreator.interrupt();
-        decryptionTasksResultsReader.interrupt();
-    }
-
-    public void checkIfPaused() {
-        if (decryptionPaused) {
-            synchronized (this) {
-                try {
-                    this.wait();
-                } catch (InterruptedException ignored) { }
-            }
-        }
+        return tasksList;
     }
 
     public int getAmountOfTotalTasks() {
         return amountOfTotalTasks;
     }
 
-    public boolean isDecryptedMessageCorrect(DecryptedMessageCandidate decryptedMessageCandidate) {
+    /*public boolean isDecryptedMessageCorrect(DecryptedMessageCandidate decryptedMessageCandidate) {
         return decryptedMessageCandidate.getMessage().equals(decryptionInputData.getOriginalMessage()) && decryptedMessageCandidate.getMachineConfiguration().toString().equals(machineCopy.getInitialMachineConfiguration().toString());
-    }
+    }*/
 }

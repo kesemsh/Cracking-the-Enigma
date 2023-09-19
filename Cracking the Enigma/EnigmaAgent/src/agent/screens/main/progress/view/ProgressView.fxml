@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.TaskProgressView?>
+
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
+<VBox spacing="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="agent.screens.main.progress.view.ProgressView">
+   <children>
+      <HBox alignment="CENTER">
+         <Label alignment="CENTER" text="Progress View" underline="true">
+            <font>
+               <Font name="Berlin Sans FB" size="20.0" />
+            </font>
+            <graphic>
+               <ImageView fitHeight="23.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="/resources/images/Progress.png" />
+                  </image>
+               </ImageView>
+            </graphic>
+            <HBox.margin>
+               <Insets bottom="-5.0" />
+            </HBox.margin>
+         </Label>
+      </HBox>
+      <HBox>
+         <VBox spacing="10.0">
+            <children>
+               <HBox>
+                  <children>
+                     <Label text="Tasks In Queue: " />
+                     <Label fx:id="tasksInQueueLabel" layoutX="10.0" layoutY="10.0" />
+                  </children>
+               </HBox>
+               <HBox layoutX="10.0" layoutY="10.0">
+                  <children>
+                     <Label text="Total Pulled Tasks: " />
+                     <Label fx:id="totalPulledTasksLabel" layoutX="10.0" layoutY="10.0" />
+                  </children>
+               </HBox>
+               <HBox layoutX="10.0" layoutY="37.0">
+                  <children>
+                     <Label text="Total Finished Tasks: " />
+                     <Label fx:id="totalFinishedTasksLabel" layoutX="10.0" layoutY="10.0" />
+                  </children>
+               </HBox>
+               <HBox layoutX="10.0" layoutY="64.0">
+                  <children>
+                     <Label text="Total Candidates Found: " />
+                     <Label fx:id="totalCandidatesFoundLabel" layoutX="10.0" layoutY="10.0" />
+                  </children>
+               </HBox>
+            </children>
+         </VBox>
+         <TaskProgressView fx:id="taskProgressView" maxHeight="300.0" maxWidth="500.0" VBox.vgrow="ALWAYS" />
+      </HBox>
+   </children>
+</VBox>

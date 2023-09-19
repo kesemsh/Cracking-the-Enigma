@@ -8,6 +8,7 @@ import object.machine.state.MachineState;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 public interface Machine extends Serializable, Cloneable {
     int getActiveRotorsCount();
@@ -40,6 +41,8 @@ public interface Machine extends Serializable, Cloneable {
 
     List<Character> getAllKeys();
 
+    Set<String> getAllowedWords();
+
     boolean isConfigurationSet();
 
     MachineStorage getMachineStorage();
@@ -47,6 +50,4 @@ public interface Machine extends Serializable, Cloneable {
     Dictionary getDictionary();
 
     Machine clone();
-
-    int getAgentsCount();
 }

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ally.Ally">
+   <StackPane>
+      <children>
+         <Label id="app-title" alignment="CENTER" minWidth="0.0" text="Ally" textAlignment="CENTER">
+            <font>
+               <Font name="Berlin Sans FB" size="35.0" />
+            </font>
+            <graphic>
+               <ImageView fitHeight="50.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../resources/images/Allies.jpg" />
+                  </image>
+               </ImageView>
+            </graphic>
+         </Label>
+         <AnchorPane StackPane.alignment="CENTER">
+            <children>
+               <HBox fx:id="greetingLabelsHBox" alignment="CENTER" layoutX="757.0" layoutY="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <children>
+                     <Label text="Hello, " />
+                     <Label fx:id="usernameValueLabel" />
+                     <Label layoutX="10.0" layoutY="10.0" text="!" />
+                  </children>
+                  <padding>
+                     <Insets right="10.0" />
+                  </padding>
+               </HBox>
+            </children>
+         </AnchorPane>
+      </children>
+   </StackPane>
+   <StackPane style="-fx-border-color: transparent;" VBox.vgrow="ALWAYS">
+      <fx:include fx:id="loginScreen" source="screens/login/LoginScreen.fxml" />
+      <fx:include fx:id="tabsManager" source="screens/tabs/manager/TabsManager.fxml" />
+   </StackPane>
+</VBox>

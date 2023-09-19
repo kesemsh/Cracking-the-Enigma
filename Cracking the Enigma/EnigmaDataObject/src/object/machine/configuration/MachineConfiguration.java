@@ -10,9 +10,9 @@ import java.util.Map;
 public class MachineConfiguration implements Serializable, Cloneable {
     private final List<Integer> rotorIDsInOrder;
     private final List<Character> rotorStartPositionsByChar;
-    private Map<Integer, Integer> rotorIDToRotationsLeftForNotchPerRotor;
     private final RomanNumber reflectorID;
-    private final Map<Character, Character> plugsToUse;
+    private Map<Integer, Integer> rotorIDToRotationsLeftForNotchPerRotor;
+    private Map<Character, Character> plugsToUse;
 
     public MachineConfiguration(List<Integer> rotorIDsInOrder, List<Character> rotorStartPositionsByChar, Map<Integer, Integer> rotorIDToRotationsLeftForNotchPerRotor, RomanNumber reflectorID, Map<Character, Character> plugsToUse) {
         this.rotorIDsInOrder = rotorIDsInOrder;
@@ -52,6 +52,10 @@ public class MachineConfiguration implements Serializable, Cloneable {
 
     public Map<Character, Character> getPlugsToUse() {
         return plugsToUse;
+    }
+
+    public void setPlugsToUse(Map<Character, Character> plugsToUse) {
+        this.plugsToUse = plugsToUse;
     }
 
     @Override
@@ -94,5 +98,14 @@ public class MachineConfiguration implements Serializable, Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!obj.getClass().equals(this.getClass())) {
+            return false;
+        }
+
+        return toString().equals(obj.toString());
     }
 }

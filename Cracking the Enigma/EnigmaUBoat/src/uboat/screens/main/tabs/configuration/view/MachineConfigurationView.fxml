@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<HBox spacing="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uboat.screens.main.tabs.configuration.view.MachineConfigurationView">
+    <children>
+        <Label fx:id="configurationTitleLabel" minWidth="-Infinity" styleClass="sub-header-label" underline="true">
+            <font>
+                <Font name="Berlin Sans FB" size="16.0" />
+            </font>
+            <HBox.margin>
+                <Insets />
+            </HBox.margin>
+            <padding>
+                <Insets top="5.0" />
+            </padding>
+        </Label>
+        <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent;">
+            <HBox.margin>
+                <Insets left="5.0" />
+            </HBox.margin>
+            <content>
+                <StackPane>
+                    <children>
+                        <Label fx:id="configurationNotSetLabel" layoutX="27.0" layoutY="17.0" minWidth="-Infinity" styleClass="missing-value-label" text="Configuration not set">
+                            <font>
+                                <Font name="System Italic" size="14.0" />
+                            </font>
+                            <StackPane.margin>
+                                <Insets left="5.0" right="5.0" />
+                            </StackPane.margin>
+                        </Label>
+                        <Label fx:id="configurationStringLabel" minWidth="-Infinity" styleClass="value-label">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </StackPane>
+            </content>
+        </ScrollPane>
+    </children>
+</HBox>
