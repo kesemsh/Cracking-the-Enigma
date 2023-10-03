@@ -1,4 +1,4 @@
-# Cracking the Enigma
+ # Cracking the Enigma
 Repository for Cracking the Enigma project, developed during a Java course in The Academic College of Tel Aviv, Yaffo. July 2022.
   
 This project consisted of the development of an Enigma machine, capable of encrypting and decrypting messages, and utilizing code cracking techniques.  
@@ -34,7 +34,7 @@ This time the app includes the ability to crack encrypted text, and decrypt it u
 The decryption process uses multi-threading to make the job a lot quicker.  
 User interface through Java FX application.  
 Machine input through XML files (Examples in relevant Source Code).  
-*Encrypted text must be a part of the dictionary of allowed words - defined in the XML file)  
+*Encrypted text must be a part of the dictionary of allowed words (defined in the XML file).  
 Capabilities:  
 All previous capabilities plus:  
 1. Visual keyboard.
